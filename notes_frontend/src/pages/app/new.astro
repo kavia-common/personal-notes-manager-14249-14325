@@ -1,0 +1,24 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import NoteEditor from '../../components/NoteEditor.astro';
+import { getCategories } from '../../services/api';
+
+let categories: string[] = [];
+try { categories = await getCategories(); } catch { categories = []; }
+---
+
+<Layout title="New Note • Ocean Notes">
+  <Sidebar categories={categories} active="" />
+  <section>
+    <div class="notes-header">
+      <div class="brand" style="gap:.5rem;"><span class="brand-badge" style="width:20px;height:20px;"></span> New Note</div>
+    </div>
+    <div class="notes-grid">
+      <div class="card" style="padding:.5rem;">
+        <div class="help" style="padding:.75rem;">Tip: Use categories and tags to keep your notes organized.</div>
+      </div>
+      <NoteEditor note={null} />
+    </div>
+  </section>
+</Layout>

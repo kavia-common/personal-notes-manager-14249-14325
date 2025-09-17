@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Create account • Ocean Notes">
+  <section class="auth-card card">
+    <div class="auth-title">
+      <span class="brand-badge"></span> Create your account
+    </div>
+    <div class="auth-sub">Join Ocean Notes to keep your ideas organized.</div>
+
+    <form id="regForm" class="card" style="padding: .9rem; display:flex; flex-direction:column; gap:.6rem;">
+      <label>
+        <div>Name</div>
+        <input class="input" type="text" name="name" placeholder="Your name" />
+      </label>
+      <label>
+        <div>Email</div>
+        <input class="input" type="email" name="email" placeholder="you@example.com" required />
+      </label>
+      <label>
+        <div>Password</div>
+        <input class="input" type="password" name="password" placeholder="••••••••" required minlength="6" />
+      </label>
+      <button class="btn primary" type="submit">Create account</button>
+      <div class="help">Already have an account? <a class="link" href="/auth/login">Sign in</a></div>
+    </form>
+  </section>
+
+  <script>
+    import { register } from '../../services/api';
+
+    function init() {
+      const form = document.getElementById('regForm') as HTMLFormElement;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        const name = String(data.get('name') || '').trim();
+        const email = String(data.get('email') || '').trim();
+        const password = String(data.get('password') || '');
+        try {
+          await register(name, email, password);
+          window.location.href = '/app';
+        } catch (err) {
+          alert((err as Error).message || 'Failed to register');
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  </script>
+</Layout>

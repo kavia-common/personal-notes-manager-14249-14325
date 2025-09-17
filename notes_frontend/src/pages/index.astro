@@ -1,11 +1,41 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Ocean Notes" description="A modern, minimalist notes manager with an ocean-inspired theme.">
+  <section class="card" style="padding:1.25rem; display:grid; grid-template-columns: 1.1fr .9fr; gap:1rem; width:100%;">
+    <div style="display:flex; flex-direction:column; gap:.6rem; align-items:flex-start; justify-content:center;">
+      <div class="brand" style="font-size:1.6rem;">
+        <span class="brand-badge" style="width:34px;height:34px;"></span>
+        Ocean Notes
+      </div>
+      <p style="color:var(--muted); margin:.2rem 0 0 0;">
+        Create, edit, organize, and search your notes. Sync across devices with a clean ocean-inspired interface.
+      </p>
+      <div style="display:flex; gap:.6rem; margin-top:.6rem;">
+        <a href="/app" class="btn primary">Open App</a>
+        <a href="/auth/register" class="btn">Create Account</a>
+      </div>
+    </div>
+    <div class="card" style="padding:1rem; background:linear-gradient(135deg, var(--grad-start), var(--grad-end));">
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:.6rem;">
+        <div class="card" style="padding:.75rem;">
+          <div style="font-weight:700;">Fast Search</div>
+          <div class="help">Find notes instantly with fuzzy search.</div>
+        </div>
+        <div class="card" style="padding:.75rem;">
+          <div style="font-weight:700;">Organize</div>
+          <div class="help">Use categories and tags to keep order.</div>
+        </div>
+        <div class="card" style="padding:.75rem;">
+          <div style="font-weight:700;">Secure</div>
+          <div class="help">Token-based auth keeps your notes safe.</div>
+        </div>
+        <div class="card" style="padding:.75rem;">
+          <div style="font-weight:700;">Responsive</div>
+          <div class="help">Works great on all your devices.</div>
+        </div>
+      </div>
+    </div>
+  </section>
 </Layout>

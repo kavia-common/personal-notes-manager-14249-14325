@@ -1,0 +1,32 @@
+---
+const { categories = [], active = '' } = Astro.props as { categories: string[]; active?: string };
+---
+
+<aside class="sidebar card">
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:.5rem;">
+    <h3 style="margin:0; font-size:1rem;">Categories</h3>
+    <a href="/app/new" class="btn primary" style="padding:.45rem .6rem; font-size:.9rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      New
+    </a>
+  </div>
+  <div class="category-list">
+    <a class={"category" + (active === '' ? ' active' : '')} href="/app">All Notes</a>
+    {categories.map(c => (
+      <a class={"category" + (active === c ? ' active' : '')} href={`/app?category=${encodeURIComponent(c)}`}>{c}</a>
+    ))}
+  </div>
+
+  <hr class="sep" />
+
+  <div>
+    <h3 style="margin:.25rem 0 .5rem 0; font-size:1rem;">Quick Filters</h3>
+    <div class="category-list">
+      <a class="category" href="/app?tag=starred">★ Starred</a>
+      <a class="category" href="/app?tag=todo">To-do</a>
+      <a class="category" href="/app?tag=ideas">Ideas</a>
+    </div>
+  </div>
+</aside>

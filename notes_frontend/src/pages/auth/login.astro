@@ -1,0 +1,48 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Sign in • Ocean Notes">
+  <section class="auth-card card">
+    <div class="auth-title">
+      <span class="brand-badge"></span> Welcome back
+    </div>
+    <div class="auth-sub">Sign in to access your notes.</div>
+
+    <form id="loginForm" class="card" style="padding: .9rem; display:flex; flex-direction:column; gap:.6rem;">
+      <label>
+        <div>Email</div>
+        <input class="input" type="email" name="email" placeholder="you@example.com" required />
+      </label>
+      <label>
+        <div>Password</div>
+        <input class="input" type="password" name="password" placeholder="••••••••" required />
+      </label>
+      <button class="btn primary" type="submit">Sign in</button>
+      <div class="help">No account? <a class="link" href="/auth/register">Create one</a></div>
+    </form>
+  </section>
+
+  <script>
+    import { login } from '../../services/api';
+
+    function init() {
+      const form = document.getElementById('loginForm') as HTMLFormElement;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        const email = String(data.get('email') || '').trim();
+        const password = String(data.get('password') || '');
+        try {
+          await login(email, password);
+          window.location.href = '/app';
+        } catch (err) {
+          alert((err as Error).message || 'Failed to sign in');
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  </script>
+</Layout>

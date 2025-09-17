@@ -1,0 +1,22 @@
+---
+import type { Note } from '../services/api';
+const { notes = [], activeId = '' } = Astro.props as { notes: Note[]; activeId?: string };
+---
+
+<div class="note-list">
+  {notes.length === 0 && <div class="card" style="padding:1rem; color:var(--muted);">No notes yet. Create your first note!</div>}
+  {notes.map(n => (
+    <a class={"note-item" + (activeId === n.id ? " active" : "")} href={`/app/${encodeURIComponent(n.id)}`}>
+      <div class="note-title">{n.title || 'Untitled'}</div>
+      <div class="note-meta">
+        {new Date(n.updatedAt || n.createdAt).toLocaleString()}
+        {n.category ? ` • ${n.category}` : ''}
+      </div>
+      {n.tags && n.tags.length > 0 && (
+        <div class="tags">
+          {n.tags.slice(0,4).map(t => <span class="tag">{t}</span>)}
+        </div>
+      )}
+    </a>
+  ))}
+</div>

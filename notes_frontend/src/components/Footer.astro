@@ -1,0 +1,18 @@
+---
+---
+<footer class="footer">
+  <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap: .75rem; flex-wrap: wrap;">
+    <div>© <span id="y"></span> Ocean Notes • Crafted with Astro</div>
+    <nav style="display:flex; gap:.6rem; flex-wrap:wrap;">
+      <a href="/about" class="link">About</a>
+      <a href="/help" class="link">Help</a>
+      <a href="https://docs.astro.build" target="_blank" rel="noopener" class="link">Docs</a>
+      <a href="/privacy" class="link">Privacy</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  const y = document.getElementById('y');
+  if (y) y.textContent = String(new Date().getFullYear());
+</script>

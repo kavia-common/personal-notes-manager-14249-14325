@@ -1,0 +1,20 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Signing out • Ocean Notes">
+  <section class="auth-card card" style="text-align:center;">
+    <div class="auth-title" style="justify-content:center;">
+      <span class="brand-badge"></span> Signing out...
+    </div>
+    <div class="auth-sub">Please wait while we sign you out.</div>
+  </section>
+
+  <script>
+    import { logout } from '../../services/api';
+    (async () => {
+      try { await logout(); } catch {}
+      window.location.href = '/';
+    })();
+  </script>
+</Layout>

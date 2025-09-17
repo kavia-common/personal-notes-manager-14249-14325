@@ -1,0 +1,71 @@
+---
+import type { Note } from '../services/api';
+const { note = null } = Astro.props as { note: Note | null };
+const isNew = !note || !note.id;
+---
+
+<div class="editor">
+  <input id="title" class="editor-title" type="text" placeholder="Note title..." value={note?.title || ''} />
+  <div class="editor-toolbar">
+    <div style="display:flex; gap:.5rem; align-items:center;">
+      <input id="category" class="input" type="text" placeholder="Category" style="max-width:180px;" value={note?.category || ''} />
+      <input id="tags" class="input" type="text" placeholder="Tags (comma separated)" style="max-width:240px;" value={(note?.tags || []).join(', ')} />
+    </div>
+    <div style="display:flex; gap:.5rem; align-items:center;">
+      {!isNew && <button id="deleteBtn" class="btn" aria-label="Delete">Delete</button>}
+      <button id="saveBtn" class="btn primary" aria-label="Save">Save</button>
+    </div>
+  </div>
+  <textarea id="content" class="textarea editor-area" placeholder="Write your note...">{note?.content || ''}</textarea>
+  {!isNew && (
+    <div class="note-meta" style="margin-top:.25rem;">
+      Last updated: {new Date(note!.updatedAt || note!.createdAt).toLocaleString()}
+    </div>
+  )}
+</div>
+
+<script client:load>
+  import { createNote, updateNote, deleteNote as apiDelete } from '../services/api';
+
+  async function onSave(noteId: string | null) {
+    const title = (document.getElementById('title') as HTMLInputElement).value.trim();
+    const content = (document.getElementById('content') as HTMLTextAreaElement).value;
+    const category = (document.getElementById('category') as HTMLInputElement).value.trim();
+    const tagsStr = (document.getElementById('tags') as HTMLInputElement).value.trim();
+    const tags = tagsStr ? tagsStr.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+    try {
+      if (noteId) {
+        const updated = await updateNote(noteId, { title, content, category, tags });
+        window.location.href = `/app/${encodeURIComponent(updated.id)}`;
+      } else {
+        const created = await createNote({ title, content, category, tags });
+        window.location.href = `/app/${encodeURIComponent(created.id)}`;
+      }
+    } catch (e) {
+      alert((e as Error).message || 'Failed to save note');
+    }
+  }
+
+  async function onDelete(noteId: string | null) {
+    if (!noteId) return;
+    if (!confirm('Delete this note? This action cannot be undone.')) return;
+    try {
+      await apiDelete(noteId);
+      window.location.href = '/app';
+    } catch (e) {
+      alert((e as Error).message || 'Failed to delete note');
+    }
+  }
+
+  function init() {
+    const saveBtn = document.getElementById('saveBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
+    const noteId = #{note ? JSON.stringify(note.id) : 'null'};
+    saveBtn?.addEventListener('click', () => onSave(noteId));
+    deleteBtn?.addEventListener('click', () => onDelete(noteId));
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+</script>
